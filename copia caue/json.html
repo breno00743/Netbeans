@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acessa e mostra o resultado</title>
+    <script>
+        window.onload = inicio;
+
+        var numeroPost = 1; 
+
+        function inicio() {
+            var botaoAnterior = document.getElementById('anterior');
+            var botaoProximo = document.getElementById('proximo');
+
+            botaoAnterior.addEventListener('click', post_anterior);
+            botaoProximo.addEventListener('click', post_proximo);
+
+            busca_e_mostra(); 
+        }
+
+        function busca_e_mostra() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                var resultado = this.responseText;
+                var objeto = JSON.parse(resultado);
+                var saida = document.getElementById('resposta');
+                saida.innerHTML = 'Título: ' + objeto.title + '<br>' + 'Corpo: ' + objeto.body;
+            }
+
+            
+            xhttp.open('GET', `https://jsonplaceholder.typicode.com/posts/${numeroPost}`);
+            xhttp.send();
+        }
+
+        function post_anterior() {
+            if (numeroPost > 1) {  
+                numeroPost--;
+                busca_e_mostra();
+            } else {
+                alert('Você está no primeiro post!');
+            }
+        }
+
+        function post_proximo() {
+            numeroPost++;  
+            busca_e_mostra();  
+        }
+    </script>
+</head>
+<body>
+    <p id="resposta"></p>
+
+    <button id="anterior">Anterior</button>
+    <button id="proximo">Próximo</button>
+</body>
+</html>
